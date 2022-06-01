@@ -1,0 +1,45 @@
+{
+  "nodes": {
+    "depot_tools": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1654107530,
+        "narHash": "sha256-JvX9lkGpx9YUzu/EP9bekVnXGumsuaT48Myj1119uIA=",
+        "ref": "main",
+        "rev": "fe3a70a926480d4a6510c0c0fc736832dcfdea93",
+        "revCount": 8889,
+        "type": "git",
+        "url": "https://chromium.googlesource.com/chromium/tools/depot_tools.git"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "https://chromium.googlesource.com/chromium/tools/depot_tools.git"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1654007547,
+        "narHash": "sha256-G812EeXZeGeGjkAvbTleGwcKFCGxdLOQb9aViOWASPc=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "5643714dea562f0161529ab23058562afeff46d0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "depot_tools": "depot_tools",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

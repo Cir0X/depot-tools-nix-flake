@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "depot_tools nix flake";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
@@ -17,28 +17,9 @@
       "aarch64-darwin"
       "aarch64-linux"
       "i686-linux"
-      # "mingW64"
-      # "mingw32"
       "x86_64-darwin"
       "x86_64-linux"
     ];
-    # _depotToolsPlatforms = [
-    #   "aix-ppc64"
-    #   "linux-386"
-    #   "linux-amd64"
-    #   "linux-arm64"
-    #   "linux-armv6l"
-    #   "linux-mips64"
-    #   "linux-mips64le"
-    #   "linux-mipsle"
-    #   "linux-ppc64"
-    #   "linux-ppc64le"
-    #   "linux-s390x"
-    #   "mac-amd64"
-    #   "mac-arm64"
-    #   "windows-386"
-    #   "windows-amd64"
-    # ];
     forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
     nixpkgsFor = forAllSystems (system:
       import nixpkgs {
@@ -47,7 +28,6 @@
     packages = forAllSystems (
       system: let
         pkgs = nixpkgsFor.${system};
-        # lib = pkgs.lib;
         inherit (pkgs) lib;
         deps = [
           "six"
@@ -99,12 +79,7 @@
           src = inputs.depot_tools;
           buildInputs = [pkgs.gcc-unwrapped py3];
           nativeBuildInputs = [pkgs.makeWrapper]; # pkgs.autoPatchelfHook
-          patches = [ ./patches/gclient-no-history.patch ];
-          # unwrapPhase = ''
-          #   mkdir -p $out/src/
-          #   cp -r $src/. $out/src/
-          #   chmod -R u+rwX,go+rX,go-w $out/src/
-          # '';
+          patches = [./patches/gclient-no-history.patch];
           installPhase = ''
             mkdir -p $out/bin
             mkdir -p $out/src/third_party/
@@ -128,10 +103,10 @@
         default = self.packages.${system}.gclient;
       }
     );
+    formatter = forAllSystems (
+      system: nixpkgsFor.${system}.treefmt
+    );
   in {
-    inherit packages;
-
-    # packages.x86_64-linux.hello = nixpkgs.legacyPackages.x86_64-linux.hello;
-    # defaultPackage.x86_64-linux = self.packages.x86_64-linux.hello;
+    inherit packages formatter;
   };
 }

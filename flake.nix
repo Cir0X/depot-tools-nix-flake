@@ -43,17 +43,17 @@
             aarch64-darwin = rec {
               platform = "mac-arm64";
               url = mkCipdUrl platform;
-              sha256 = "";
+              sha256 = "0h0g5czc8xzd7cgm835r7hra2kmpkdjhyj3qxph6kh0v1p206yh7";
             };
             aarch64-linux = rec {
               platform = "linux-arm64";
               url = mkCipdUrl platform;
-              sha256 = "";
+              sha256 = "1byrkmr34mycc7r5gzxzjlnqmn626r5zrbh05lgh46h475hijmyk";
             };
             i686-linux = rec {
               platform = "linux-386";
               url = mkCipdUrl platform;
-              sha256 = "";
+              sha256 = "04yaw6ilrp9sm7w0yq2km77q3v25j0smlrhvc4f18k42d89562cq";
             };
             x86_64-darwin = rec {
               platform = "mac-amd64";
@@ -63,7 +63,7 @@
             x86_64-linux = rec {
               platform = "linux-amd64";
               url = mkCipdUrl platform;
-              sha256 = "";
+              sha256 = "0mvj497zzbcj9h86dmgmvcl1s5hcg3j9g84kl79z9s65lg3xkdbf";
             };
           };
         in

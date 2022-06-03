@@ -1,0 +1,66 @@
+#+title: depot_tools nix flake
+#+author: Wolfhard Prell
+
+* Introduction
+Nix flake for the [[https://chromium.googlesource.com/chromium/tools/depot_tools.git][depot_tools]] =gclient= utility.
+
+- Patched =gclient_scm.py=, in order to get the =--no-history= (=--depth=1=) parameter [[https://groups.google.com/a/chromium.org/g/chromium-dev/c/54WSZQy6vp4][working]].
+- =gclient= executable is wrapped with the required dependencies and environment variables.
+
+| Variable            |                                                      Value | Description                             |
+|---------------------+------------------------------------------------------------+-----------------------------------------|
+| DEPOT_TOOLS_UPDATE  |                                                          0 | Inhibit automatic =depot_tools= updates |
+| DEPOT_TOOLS_METRICS |                                                          0 | Disable metrics                         |
+| GCLIENT_PY3         |                                                          1 | Use python3 for =gclient=               |
+| VPYTHON_BYPASS      | manually managed python not supported by chrome operations | Ignore vpython wrapper                  |
+
+* Command line usage
+#+begin_src shell
+nix run "github:cir0x/depot-tools-nix-flake" -- help
+#+end_src
+
+* Flake usage
+#+begin_src nix
+ {
+   description = "A very basic flake";
+
+   inputs = {
+     depot-tools.url = "github:cir0x/depot-tools-nix-flake";
+   };
+
+   outputs = {
+     self,
+     nixpkgs,
+     depot-tools,
+   }: let
+     system = "x86_64-darwin";
+     pkgs = import nixpkgs {
+       inherit system;
+     };
+   in {
+     packages.${system}.example = pkgs.stdenv.mkDerivation {
+       pname = "example";
+       version = "1.0";
+       nativeBuildInputs = [
+         depot-tools.packages."${system}".gclient
+       ];
+       phases = ["installPhase"];
+       installPhase = ''
+         mkdir -p $out
+         gclient --version > $out/gclient.version
+         gclient help > $out/gclient-help.txt
+       '';
+     };
+     defaultPackage.${system} = self.packages.${system}.example;
+   };
+ }
+#+end_src
+
+#+begin_src shell
+nix build ".#example"
+#+end_src
+
+#+begin_src shell
+cat result/gclient.version
+# => gclient.py 0.7
+#+end_src
